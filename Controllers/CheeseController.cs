@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CheeseMVC.Models;
+using CheeseMVC.ViewModels;
 
 namespace CheeseMVC.Controllers
 {
@@ -14,15 +15,17 @@ namespace CheeseMVC.Controllers
         {
             List<Cheese> cheeses = CheeseData.GetAll();
 
+            //example of a view model
+
             return View(cheeses);
         }
         public IActionResult Add()
         {
-            return View();
+            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel();
+            return View(addCheeseViewModel);
         }
         [HttpPost]
-        [Route("/Cheese/Add")]
-        public IActionResult NewCheese(Cheese newCheese) // can do this instead of passing parameter for name and description
+        public IActionResult Add(AddCheeseViewModel addCheeseViewModel) // can do this instead of passing parameter for name and description
 
         {
             /*
@@ -30,16 +33,24 @@ namespace CheeseMVC.Controllers
              newCheese.Name = Request.get(name);
              newCheese.Description = Request.get(description);
 
-            In order for this to work, you need a default constructor with no parameters 
-
+            In order for this to work, you need a default constructor with no parameters
              
             */
 
-
-
-            //Add the new cheese to existing cheese list
-            CheeseData.Add(newCheese);
-            return Redirect("/Cheese");
+            if(ModelState.IsValid)
+            {
+                Cheese newCheese = new Cheese
+                {
+                    Name = addCheeseViewModel.Name,
+                    Description = addCheeseViewModel.Description,
+                    Type = addCheeseViewModel.Type
+                };
+                //Add the new cheese to existing cheese list
+                CheeseData.Add(newCheese);
+                return Redirect("/Cheese");
+            }
+            return View(addCheeseViewModel);
+            
         }
         
         public IActionResult Remove()

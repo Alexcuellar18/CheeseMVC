@@ -1,18 +1,24 @@
-﻿@{
-    Layout = null;
-}
+﻿@model CheeseMVC.ViewModels.AddCheeseViewModel
+
+
+
 
 <h1>Add Cheese</h1>
-<form method="post">
-    <label>
-     Cheese Name
-     <input name="name" type="text" />
-    </label>
+<form asp-controller="Cheese" asp-action="Add" method="post">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name"></span>
     <br />
-    <label>
-     Description:
-    <input name="description" type ="text"/>
-    </label>
+    <label asp-for="Description"></label>
+    <input asp-for="Description" />
+    <span asp-validation-for="Description"></span>
+    <br />
+    <label asp-for="Type"></label>
+    <select asp-for="Type" asp-items="Model.CheeseTypes"></select>
+    <br />
+
+
+    
 
     <input type="submit" value="Add Cheese" />
 </form>
